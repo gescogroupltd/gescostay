@@ -62,6 +62,11 @@ export default function Navbar() {
           <div className="flex items-center">
             <Link
               to="/"
+              onClick={() => {
+                if (location.pathname === '/') {
+                  window.scrollTo({ top: 0, behavior: 'smooth' })
+                }
+              }}
               className="flex items-center transition-opacity duration-200 hover:opacity-80"
             >
               <img
@@ -252,7 +257,17 @@ export default function Navbar() {
             >
               {/* Drawer header */}
               <div className="flex items-center justify-between px-6 py-5 border-b border-ivory-200">
-                <img src={logoSrc} alt="Gescostay" className="h-8 w-auto" />
+                <Link 
+                  to="/" 
+                  onClick={() => {
+                    setMobileOpen(false)
+                    if (location.pathname === '/') {
+                      window.scrollTo({ top: 0, behavior: 'smooth' })
+                    }
+                  }}
+                >
+                  <img src={logoSrc} alt="Gescostay" className="h-8 w-auto" />
+                </Link>
                 <button
                   onClick={() => setMobileOpen(false)}
                   className="p-2 rounded-xl hover:bg-ivory-200 transition-colors text-earth-600"
