@@ -36,7 +36,7 @@ export default function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <BrowserRouter>
+        <BrowserRouter basename="/gescostay">
           <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route element={<Layout />}>
