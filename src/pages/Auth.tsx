@@ -64,14 +64,7 @@ export default function Auth() {
       {/* Right: form */}
       <div className="flex-1 flex items-center justify-center px-6 py-12">
         <div className="w-full max-w-md">
-          {/* Logo mobile */}
-          <Link to="/" className="flex items-center gap-2.5 mb-8 lg:hidden">
-            <svg width="28" height="28" viewBox="0 0 32 32" fill="none">
-              <path d="M16 3L4 12V29H13V20H19V29H28V12L16 3Z" fill="#2C2218" />
-              <circle cx="23" cy="9" r="5" fill="#C4653A" />
-            </svg>
-            <span className="font-display text-xl font-semibold text-earth-900">Gescostay</span>
-          </Link>
+
 
           <h1 className="font-display text-display-sm text-earth-900 mb-2">
             {mode === 'signin' ? 'Welcome back' : 'Create account'}
