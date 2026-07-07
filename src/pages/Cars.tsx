@@ -66,8 +66,8 @@ export default function Cars() {
 
       <div className="container-site pb-12">
         {/* Sticky Controls */}
-        <div className="sticky top-[4.5rem] md:top-[5.5rem] z-40 bg-ivory-100/85 backdrop-blur-[24px] py-4 -mx-4 px-4 sm:mx-0 sm:px-0 mb-8 border-b border-ivory-200/50 shadow-[0_12px_24px_-12px_rgba(30,18,8,0.05)] transition-all flex flex-col sm:flex-row gap-3">
-          <div className="relative flex-1">
+        <div className="sticky top-[5.5rem] md:top-[6rem] z-30 bg-ivory-100/90 backdrop-blur-[24px] py-4 -mx-4 px-4 sm:mx-0 sm:px-0 mb-8 border-b border-ivory-200/50 shadow-[0_12px_24px_-12px_rgba(30,18,8,0.05)] transition-all grid grid-cols-2 sm:flex sm:flex-row gap-3">
+          <div className="col-span-2 sm:col-span-1 relative flex-1">
             <Search size={16} className="absolute left-3.5 top-1/2 -translate-y-1/2 text-earth-400" />
             <input type="text" value={location} onChange={e => setLocation(e.target.value)}
               placeholder="Search by city or country..." className="input-field pl-10" />
@@ -77,7 +77,7 @@ export default function Cars() {
             <SlidersHorizontal size={16} /> Filters
           </button>
           <div className="relative">
-            <select value={sort} onChange={e => setSort(e.target.value)} className="input-field pr-10 appearance-none cursor-pointer min-w-[160px]">
+            <select value={sort} onChange={e => setSort(e.target.value)} className="input-field pr-10 appearance-none cursor-pointer w-full sm:min-w-[160px]">
               <option value="newest">Newest First</option>
               <option value="price_asc">Price: Low → High</option>
               <option value="price_desc">Price: High → Low</option>
