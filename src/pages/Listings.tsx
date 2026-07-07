@@ -5,6 +5,8 @@ import { Search, SlidersHorizontal, X, MapPin, ChevronDown } from 'lucide-react'
 import { supabase, type Property } from '../lib/supabase'
 import ListingCard, { ListingCardSkeleton } from '../components/ui/ListingCard'
 import ScrollReveal from '../components/ui/ScrollReveal'
+import { useDebounce } from '../hooks/useDebounce'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const PROPERTY_TYPES = ['Apartment', 'Villa', 'Guest House', 'Lodge', 'Studio', 'Hotel Room', 'Entire Home']
 const SORT_OPTIONS = [
@@ -28,6 +30,15 @@ export default function Listings() {
   const [beds, setBeds] = useState('')
   const [types, setTypes] = useState<string[]>([])
 
+  // SEO
+  usePageMeta({
+    title: 'Extraordinary Stays',
+    description: 'Discover handpicked properties across Africa — apartments, villas, lodges and more.',
+  })
+
+  // Debounced location to avoid excessive Supabase queries
+  const debouncedLocation = useDebounce(location, 350)
+
   const fetchProperties = useCallback(async () => {
     setLoading(true)
     let query = supabase
@@ -35,7 +46,7 @@ export default function Listings() {
       .select('*')
       .eq('status', 'approved')
 
-    if (location) query = query.ilike('location', `%${location}%`)
+    if (debouncedLocation) query = query.ilike('location', `%${debouncedLocation}%`)
     if (minPrice) query = query.gte('price', Number(minPrice))
     if (maxPrice) query = query.lte('price', Number(maxPrice))
     if (beds) query = query.gte('beds', Number(beds))
@@ -49,7 +60,7 @@ export default function Listings() {
     const { data } = await query.limit(48)
     setProperties(data || [])
     setLoading(false)
-  }, [location, sort, minPrice, maxPrice, beds, types])
+  }, [debouncedLocation, sort, minPrice, maxPrice, beds, types])
 
   useEffect(() => { fetchProperties() }, [fetchProperties])
 

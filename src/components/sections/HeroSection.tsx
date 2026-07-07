@@ -65,7 +65,11 @@ export default function HeroSection() {
     : SUGGESTED
 
   return (
-    <section className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden">
+    <section
+      className="relative w-full min-h-screen flex flex-col items-center justify-center overflow-hidden"
+      role="region"
+      aria-label="Hero — Discover African stays"
+    >
 
       {/* ── Background images — crossfade cinématographique ─────── */}
       <div className="absolute inset-0 z-0">
@@ -82,10 +86,13 @@ export default function HeroSection() {
             <img
               src={src}
               alt=""
+              aria-hidden="true"
+              width={2560}
+              height={1440}
               className="w-full h-full object-cover object-center animate-ken-burns"
               loading={i === 0 ? 'eager' : 'lazy'}
               decoding={i === 0 ? 'sync' : 'async'}
-              fetchPriority={i === 0 ? 'high' : 'auto' as any}
+              fetchPriority={i === 0 ? 'high' : 'auto'}
             />
           </div>
         ))}

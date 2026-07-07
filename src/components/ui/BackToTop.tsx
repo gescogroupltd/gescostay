@@ -40,9 +40,10 @@ export default function BackToTop() {
           transition={{ duration: 0.2, ease: 'easeOut' }}
           onClick={scrollToTop}
           aria-label="Back to top"
-          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-3 rounded-full bg-terracotta-600 text-white shadow-lg hover:bg-terracotta-500 hover:-translate-y-1 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta-500 focus-visible:ring-offset-2"
+          className="fixed bottom-6 right-6 md:bottom-8 md:right-8 z-50 p-3 rounded-full bg-terracotta-600 text-white hover:bg-terracotta-500 hover:-translate-y-1 transition-all duration-300 group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-terracotta-500 focus-visible:ring-offset-2"
           style={{
             boxShadow: '0 4px 14px rgba(188, 95, 56, 0.4), 0 1px 3px rgba(30, 18, 8, 0.1)',
+            marginBottom: 'env(safe-area-inset-bottom, 0px)',
           }}
         >
           <ChevronUp 

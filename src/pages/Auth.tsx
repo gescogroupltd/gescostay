@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom'
 import { Eye, EyeOff, ArrowRight } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { useAuth } from '../contexts/AuthContext'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 export default function Auth() {
   const [searchParams] = useSearchParams()
@@ -19,6 +20,11 @@ export default function Auth() {
   const [success, setSuccess] = useState('')
   const { signIn, signUp } = useAuth()
   const navigate = useNavigate()
+
+  usePageMeta({
+    title: mode === 'signin' ? 'Sign In' : 'Create Account',
+    description: 'Sign in or create your Gescostay account to book authentic African stays and experiences.',
+  })
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -80,7 +86,7 @@ export default function Auth() {
             {['signin', 'signup'].map((tab) => (
               <button
                 key={tab}
-                onClick={() => { setMode(tab as any); setError(''); setSuccess('') }}
+                onClick={() => { setMode(tab as 'signin' | 'signup'); setError(''); setSuccess('') }}
                 className={`relative flex-1 py-2.5 text-sm font-medium transition-colors z-10 ${
                   mode === tab ? 'text-earth-900' : 'text-earth-500 hover:text-earth-700'
                 }`}

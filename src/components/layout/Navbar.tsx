@@ -23,9 +23,16 @@ export default function Navbar() {
   const userMenuRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const handler = () => setScrolled(window.scrollY > 50)
+    let rafId: number
+    const handler = () => {
+      cancelAnimationFrame(rafId)
+      rafId = requestAnimationFrame(() => setScrolled(window.scrollY > 50))
+    }
     window.addEventListener('scroll', handler, { passive: true })
-    return () => window.removeEventListener('scroll', handler)
+    return () => {
+      window.removeEventListener('scroll', handler)
+      cancelAnimationFrame(rafId)
+    }
   }, [])
 
   useEffect(() => {
@@ -218,7 +225,9 @@ export default function Navbar() {
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
               className="lg:hidden p-2 rounded-xl transition-colors ml-1 text-earth-700 hover:bg-ivory-200"
-              aria-label="Toggle menu"
+              aria-label={mobileOpen ? 'Close menu' : 'Open menu'}
+              aria-expanded={mobileOpen}
+              aria-controls="mobile-drawer"
             >
               {mobileOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
@@ -244,6 +253,7 @@ export default function Navbar() {
 
             {/* Drawer panel */}
             <motion.div
+              id="mobile-drawer"
               initial={{ x: '100%' }}
               animate={{ x: 0 }}
               exit={{ x: '100%' }}

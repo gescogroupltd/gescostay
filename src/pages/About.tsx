@@ -1,6 +1,7 @@
 import ScrollReveal from '../components/ui/ScrollReveal'
 import { Link } from 'react-router-dom'
 import { ArrowRight, Users, Globe, Heart } from 'lucide-react'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const stats = [
   { value: '10K+', label: 'Properties listed' },
@@ -37,6 +38,11 @@ const audiences = [
 ]
 
 export default function About() {
+  usePageMeta({
+    title: 'About Gescostay',
+    description: 'Built for Africa, by Africans. Gescostay redefines African hospitality with curated stays and authentic local experiences.',
+    ogImage: 'https://images.unsplash.com/photo-1516026672322-bc52d61a55d5?w=1200&q=80',
+  })
   return (
     <div className="min-h-screen bg-ivory-100 nav-offset">
       {/* Hero */}

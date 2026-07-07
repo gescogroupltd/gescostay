@@ -21,6 +21,14 @@ export default function ScrollReveal({
     const el = ref.current
     if (!el) return
 
+    // Respect user's reduced motion preference
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (prefersReducedMotion) {
+      el.style.opacity = '1'
+      el.style.transform = 'none'
+      return
+    }
+
     // Initial hidden state
     el.style.opacity   = '0'
     el.style.transition = `opacity 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms, transform 0.75s cubic-bezier(0.16, 1, 0.3, 1) ${delay}ms`
@@ -51,3 +59,4 @@ export default function ScrollReveal({
     </div>
   )
 }
+

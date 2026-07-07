@@ -5,6 +5,8 @@ import { Search, SlidersHorizontal, X, ChevronDown } from 'lucide-react'
 import { supabase, type Car } from '../lib/supabase'
 import CarCard, { CarCardSkeleton } from '../components/ui/CarCard'
 import ScrollReveal from '../components/ui/ScrollReveal'
+import { useDebounce } from '../hooks/useDebounce'
+import { usePageMeta } from '../hooks/usePageMeta'
 
 const TRANSMISSIONS = ['Automatic', 'Manual']
 const FUEL_TYPES = ['Petrol', 'Diesel', 'Electric', 'Hybrid']
@@ -22,10 +24,19 @@ export default function Cars() {
   const [transmission, setTransmission] = useState('')
   const [fuelType, setFuelType] = useState('')
 
+  // SEO
+  usePageMeta({
+    title: 'Premium Car Rentals',
+    description: 'Find high-quality vehicles for rent across Africa. Automatic, manual, electric and more.',
+  })
+
+  // Debounced location to avoid excessive Supabase queries
+  const debouncedLocation = useDebounce(location, 350)
+
   const fetchCars = useCallback(async () => {
     setLoading(true)
     let query = supabase.from('cars').select('*').eq('status', 'approved')
-    if (location) query = query.ilike('location', `%${location}%`)
+    if (debouncedLocation) query = query.ilike('location', `%${debouncedLocation}%`)
     if (maxPrice) query = query.lte('price_day', Number(maxPrice))
     if (seats) query = query.gte('seats', Number(seats))
     if (transmission) query = query.eq('transmission', transmission)
@@ -36,7 +47,7 @@ export default function Cars() {
     const { data } = await query.limit(48)
     setCars(data || [])
     setLoading(false)
-  }, [location, sort, maxPrice, seats, transmission, fuelType])
+  }, [debouncedLocation, sort, maxPrice, seats, transmission, fuelType])
 
   useEffect(() => { fetchCars() }, [fetchCars])
 

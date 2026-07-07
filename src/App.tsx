@@ -7,7 +7,7 @@ import Home from './pages/Home'
 
 // Lazy-loaded pages
 import { lazy, Suspense } from 'react'
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
 const Listings = lazy(() => import('./pages/Listings'))
 const ListingDetail = lazy(() => import('./pages/ListingDetail'))
 const Cars = lazy(() => import('./pages/Cars'))
@@ -87,7 +87,7 @@ function NotFound() {
         <p className="font-display text-8xl font-semibold text-ivory-300 mb-4">404</p>
         <h1 className="font-display text-2xl text-earth-900 mb-3">Page not found</h1>
         <p className="font-body text-earth-500 mb-8">This page doesn't exist or has been moved.</p>
-        <a href="/" className="btn-primary">Go Home</a>
+        <Link to="/" className="btn-primary">Go Home</Link>
       </div>
     </div>
   )

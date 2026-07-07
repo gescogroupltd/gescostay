@@ -84,6 +84,7 @@ export default function ListingCard({ property, variant = 'default' }: ListingCa
         <button
           onClick={e => { e.preventDefault(); setLiked(!liked) }}
           aria-label={liked ? 'Remove from wishlist' : 'Add to wishlist'}
+          aria-pressed={liked}
           className="absolute top-3 right-3 w-8 h-8 rounded-full flex items-center justify-center transition-all duration-200"
           style={{
             background: 'rgba(255,255,255,0.92)',
