@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useCallback } from 'react'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { MapPin, Users, Fuel, Settings, Calendar, ChevronLeft, ChevronRight, X, Shield, Share2, Heart } from 'lucide-react'
+import toast from 'react-hot-toast'
 import { supabase, type Car } from '../lib/supabase'
 import { useAuth } from '../contexts/AuthContext'
 
@@ -17,12 +18,62 @@ export default function CarDetail() {
   const [durationType, setDurationType] = useState<'daily' | 'weekly' | 'monthly'>('daily')
   const [booking, setBooking] = useState(false)
   const [bookingSuccess, setBookingSuccess] = useState(false)
+  const [liked, setLiked] = useState(false)
+  const [favoriteId, setFavoriteId] = useState<string | null>(null)
+  const [savingFav, setSavingFav] = useState(false)
 
   useEffect(() => {
     if (!id) return
     supabase.from('cars').select('*').eq('id', id).single()
-      .then(({ data }) => { setCar(data); setLoading(false) })
-  }, [id])
+      .then(async ({ data }) => {
+        setCar(data)
+        setLoading(false)
+        if (user && data) {
+          const { data: fav } = await supabase
+            .from('car_favorites')
+            .select('id')
+            .eq('user_id', user.id)
+            .eq('car_id', data.id)
+            .maybeSingle()
+          if (fav) { setLiked(true); setFavoriteId(fav.id) }
+        }
+      })
+  }, [id, user])
+
+  const handleShare = useCallback(async () => {
+    const shareData = {
+      title: car ? `${car.make} ${car.model}` : 'Gescostay',
+      text: `Check out this vehicle on Gescostay: ${car?.make} ${car?.model}`,
+      url: window.location.href,
+    }
+    if (navigator.share) {
+      try { await navigator.share(shareData) } catch { /* cancelled */ }
+    } else {
+      await navigator.clipboard.writeText(window.location.href)
+      toast.success('Link copied to clipboard!')
+    }
+  }, [car])
+
+  const handleSave = useCallback(async () => {
+    if (!user) { navigate('/auth'); return }
+    if (!car) return
+    setSavingFav(true)
+    if (liked && favoriteId) {
+      await supabase.from('car_favorites').delete().eq('id', favoriteId)
+      setLiked(false)
+      setFavoriteId(null)
+      toast.success('Removed from saved')
+    } else {
+      const { data } = await supabase.from('car_favorites').insert({
+        user_id: user.id,
+        car_id: car.id,
+      }).select('id').single()
+      if (data) setFavoriteId(data.id)
+      setLiked(true)
+      toast.success('Saved to your collection ♥')
+    }
+    setSavingFav(false)
+  }, [user, car, liked, favoriteId, navigate])
 
   const days = startDate && endDate
     ? Math.max(0, Math.ceil((new Date(endDate).getTime() - new Date(startDate).getTime()) / 86400000))
@@ -93,11 +144,11 @@ export default function CarDetail() {
             </div>
           </div>
           <div className="flex items-center gap-3">
-            <button className="flex items-center gap-2 text-sm font-body font-medium text-earth-900 hover:bg-ivory-200 px-3 py-1.5 rounded-lg transition-colors">
+            <button onClick={handleShare} className="flex items-center gap-2 text-sm font-body font-medium text-earth-900 hover:bg-ivory-200 px-3 py-1.5 rounded-lg transition-colors">
               <Share2 size={15} /> <span className="hidden sm:inline">Share</span>
             </button>
-            <button className="flex items-center gap-2 text-sm font-body font-medium text-earth-900 hover:bg-ivory-200 px-3 py-1.5 rounded-lg transition-colors">
-              <Heart size={15} className="text-earth-900" /> <span className="hidden sm:inline">Save</span>
+            <button onClick={handleSave} disabled={savingFav} className="flex items-center gap-2 text-sm font-body font-medium text-earth-900 hover:bg-ivory-200 px-3 py-1.5 rounded-lg transition-colors disabled:opacity-60">
+              <Heart size={15} className={liked ? 'fill-red-500 text-red-500' : 'text-earth-900'} /> <span className="hidden sm:inline">{liked ? 'Saved' : 'Save'}</span>
             </button>
           </div>
         </div>

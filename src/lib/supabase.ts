@@ -1,7 +1,21 @@
 import { createClient } from '@supabase/supabase-js'
 
-const SUPABASE_URL = 'https://mbyiidayuburouqozgfq.supabase.co'
-const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im1ieWlpZGF5dWJ1cm91cW96Z2ZxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDgwODQ3ODMsImV4cCI6MjA2MzY2MDc4M30.m-A791D2aQoW7RjTRBMPtTmHTykWorVjB_Zaf8kBrXk'
+// ─── Environment variables (Vite convention: VITE_* prefix) ──────────────────
+// Values are defined in .env.local (ignored by Git).
+// See .env.example for the list of required variables.
+const SUPABASE_URL      = import.meta.env.VITE_SUPABASE_URL      as string
+const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY as string
+
+// Guard: fail fast with a clear message if variables are missing
+if (!SUPABASE_URL || !SUPABASE_ANON_KEY) {
+  throw new Error(
+    '[Gescostay] Missing Supabase environment variables.\n' +
+    'Create a .env.local file at the project root and set:\n' +
+    '  VITE_SUPABASE_URL=...\n' +
+    '  VITE_SUPABASE_ANON_KEY=...\n' +
+    'See .env.example for details.'
+  )
+}
 
 export const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
   auth: {

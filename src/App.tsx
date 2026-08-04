@@ -8,14 +8,20 @@ import Home from './pages/Home'
 // Lazy-loaded pages
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom'
-const Listings = lazy(() => import('./pages/Listings'))
+const Listings      = lazy(() => import('./pages/Listings'))
 const ListingDetail = lazy(() => import('./pages/ListingDetail'))
-const Cars = lazy(() => import('./pages/Cars'))
-const About = lazy(() => import('./pages/About'))
-const Auth = lazy(() => import('./pages/Auth'))
-const CarDetail = lazy(() => import('./pages/CarDetail'))
+const Cars          = lazy(() => import('./pages/Cars'))
+const About         = lazy(() => import('./pages/About'))
+const Auth          = lazy(() => import('./pages/Auth'))
+const CarDetail     = lazy(() => import('./pages/CarDetail'))
 const ListingCreate = lazy(() => import('./pages/ListingCreate'))
-const CarCreate = lazy(() => import('./pages/CarCreate'))
+const CarCreate     = lazy(() => import('./pages/CarCreate'))
+const Profile       = lazy(() => import('./pages/Profile'))
+const Bookings      = lazy(() => import('./pages/Bookings'))
+const Community     = lazy(() => import('./pages/Community'))
+const Privacy       = lazy(() => import('./pages/Privacy'))
+const Terms         = lazy(() => import('./pages/Terms'))
+const Safety        = lazy(() => import('./pages/Safety'))
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { staleTime: 1000 * 60 * 5 } },
@@ -41,14 +47,25 @@ export default function App() {
             <Routes>
               <Route element={<Layout />}>
                 <Route path="/" element={<Home />} />
+                {/* Stays — static BEFORE dynamic */}
+                <Route path="/listings/create" element={<ListingCreate />} />
                 <Route path="/listings" element={<Listings />} />
                 <Route path="/listings/:id" element={<ListingDetail />} />
-                <Route path="/listings/create" element={<ListingCreate />} />
+                {/* Cars — static BEFORE dynamic */}
+                <Route path="/cars/create" element={<CarCreate />} />
                 <Route path="/cars" element={<Cars />} />
                 <Route path="/cars/:id" element={<CarDetail />} />
-                <Route path="/cars/create" element={<CarCreate />} />
-                <Route path="/about" element={<About />} />
-                <Route path="/auth" element={<Auth />} />
+                {/* Community / Discover */}
+                <Route path="/community" element={<Community />} />
+                {/* User account */}
+                <Route path="/profile" element={<Profile />} />
+                <Route path="/bookings" element={<Bookings />} />
+                {/* Info pages */}
+                <Route path="/about"   element={<About />} />
+                <Route path="/auth"    element={<Auth />} />
+                <Route path="/privacy" element={<Privacy />} />
+                <Route path="/terms"   element={<Terms />} />
+                <Route path="/safety"  element={<Safety />} />
                 {/* Catch-all */}
                 <Route path="*" element={<NotFound />} />
               </Route>
